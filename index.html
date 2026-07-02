@@ -623,7 +623,7 @@ class Component extends DCLogic {
     window.addEventListener('keydown', this._onKey);
     window.addEventListener('wheel', this._onWheel, { passive:false });
     let saved=null;
-    try{ saved=JSON.parse(localStorage.getItem('alara_v1')||'null'); }catch(e){}
+    try{ saved=JSON.parse(localStorage.getItem('alara_v2')||'null'); }catch(e){}
     if(saved && Array.isArray(saved.products)){
       this.setState({ products:saved.products, hero:saved.hero||1 });
     } else {
@@ -635,7 +635,7 @@ class Component extends DCLogic {
 
   componentWillUnmount(){ if(this._onKey) window.removeEventListener('keydown', this._onKey); if(this._onWheel) window.removeEventListener('wheel', this._onWheel); }
 
-  save=()=>{ try{ localStorage.setItem('alara_v1', JSON.stringify({ products:this.state.products, hero:this.state.hero })); }catch(e){ alert('No se pudo guardar: el almacenamiento del navegador está lleno. Los videos ocupan mucho espacio — probá quitar algún video o usar clips más cortos.'); } };
+  save=()=>{ try{ localStorage.setItem('alara_v2', JSON.stringify({ products:this.state.products, hero:this.state.hero })); }catch(e){ alert('No se pudo guardar: el almacenamiento del navegador está lleno. Los videos ocupan mucho espacio — probá quitar algún video o usar clips más cortos.'); } };
 
   // ── Medios (fotos + videos) ─────────────────────────────
   downscaleImg(file){
