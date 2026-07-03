@@ -125,6 +125,7 @@ function abrirDetalle(id){
       th.querySelectorAll('[data-i]').forEach(x=>x.classList.remove('sel')); t.classList.add('sel');
     });
   }
+  const bb=$('#bigBox'); if(bb){ bb.style.cursor='zoom-in'; bb.onclick=()=>{ const im=bb.querySelector('img'); if(im) abrirZoom(im.src); }; }
   if (varios) $('#detCont').querySelectorAll('.col-opt').forEach(b=>b.onclick=()=>{
     detColor=b.dataset.color;
     $('#detCont').querySelectorAll('.col-opt').forEach(x=>x.classList.remove('sel')); b.classList.add('sel');
@@ -193,5 +194,31 @@ function renderFaq(){
 }
 let toastT;
 function toast(t){ const el=$('#toast'); el.textContent=t; el.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'),2200); }
+
+/* ---- Zoom de imagenes (clic para agrandar + rueda del mouse) ---- */
+let zScale=1, zX=0, zY=0, zDrag=false, zSX=0, zSY=0;
+function aplicarZoom(){ const i=$('#zoomImg'); if(i) i.style.transform=`translate(${zX}px,${zY}px) scale(${zScale})`; }
+function abrirZoom(src){ if(!src) return; zScale=1; zX=0; zY=0; $('#zoomImg').src=src; aplicarZoom(); $('#zoomOv').classList.add('open'); }
+function cerrarZoom(){ $('#zoomOv').classList.remove('open'); }
+function setZoom(v){ zScale=Math.min(5,Math.max(1,v)); if(zScale===1){zX=0;zY=0;} aplicarZoom(); }
+(function(){
+  const ov=$('#zoomOv'); if(!ov) return;
+  ov.addEventListener('wheel', e=>{ e.preventDefault(); setZoom(zScale + (e.deltaY<0?0.2:-0.2)); }, {passive:false});
+  $('#zoomIn').onclick = e=>{ e.stopPropagation(); setZoom(zScale+0.3); };
+  $('#zoomOut').onclick = e=>{ e.stopPropagation(); setZoom(zScale-0.3); };
+  $('#zoomClose').onclick = cerrarZoom;
+  ov.addEventListener('click', e=>{ if(e.target.id==='zoomOv') cerrarZoom(); });
+  const img=$('#zoomImg');
+  img.addEventListener('mousedown', e=>{ if(zScale<=1) return; zDrag=true; zSX=e.clientX-zX; zSY=e.clientY-zY; e.preventDefault(); });
+  window.addEventListener('mousemove', e=>{ if(!zDrag) return; zX=e.clientX-zSX; zY=e.clientY-zSY; aplicarZoom(); });
+  window.addEventListener('mouseup', ()=>{ zDrag=false; });
+  window.addEventListener('keydown', e=>{ if(e.key==='Escape') cerrarZoom(); });
+})();
+
+/* ---- Vista previa en vivo (para el panel admin via iframe) ---- */
+window.addEventListener('message', e=>{
+  const d=e.data; if(!d || !d.__alaraPreview) return;
+  Object.assign(C, d.contenido||{}); aplicarContenido();
+});
 
 init();

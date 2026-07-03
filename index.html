@@ -110,6 +110,15 @@ footer .brand{color:#fff}footer a{color:var(--secundario);margin:0 8px}
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--primario);color:#fff;padding:11px 20px;border-radius:999px;font-size:14px;opacity:0;transition:.25s;z-index:100;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(max-width:720px){.cart-panel{max-width:100%}}
+
+.det-media .big{cursor:zoom-in}
+.zoom-ov{position:fixed;inset:0;background:rgba(20,15,12,.93);display:none;align-items:center;justify-content:center;z-index:90;overflow:hidden;cursor:zoom-out}
+.zoom-ov.open{display:flex}
+.zoom-ov img{max-width:92vw;max-height:86vh;transform-origin:center;transition:transform .04s linear;cursor:grab;user-select:none;-webkit-user-drag:none}
+.zoom-ov img:active{cursor:grabbing}
+.zoom-close{position:fixed;top:18px;right:20px;background:rgba(255,255,255,.16);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer;z-index:2}
+.zoom-ctrls{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:2}
+.zoom-ctrls button{background:rgba(255,255,255,.16);color:#fff;border:none;border-radius:9px;width:46px;height:42px;font-size:22px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -163,6 +172,11 @@ footer .brand{color:#fff}footer a{color:var(--secundario);margin:0 8px}
   <div class="cart-foot" id="cartFoot"><div class="cart-total">Total <b id="cartTotal">$0</b></div>
     <button class="btn btn-wa" id="cartCheckout">Finalizar pedido por WhatsApp</button></div>
 </div></div>
+<div class="zoom-ov" id="zoomOv">
+  <button class="zoom-close" id="zoomClose">✕</button>
+  <div class="zoom-ctrls"><button id="zoomOut">−</button><button id="zoomIn">+</button></div>
+  <img id="zoomImg" alt="">
+</div>
 <div class="toast" id="toast"></div>
 <script src="/app.js"></script>
 </body>
